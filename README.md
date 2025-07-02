@@ -9,6 +9,7 @@ A collection of PowerShell scripts for managing and automating Microsoft Intune 
 | Script Name | Description | Parameters | Usage |
 |-------------|-------------|------------|-------|
 | [Get-ObjectID.ps1](#get-objectidps1) | Retrieves Azure AD device Object IDs from Microsoft Graph based on device display names | `-DeviceName`, `-InputFilePath`, `-OutputFilePath` | Single device lookup or bulk operations from file |
+| [Add-ManagedDeviceToAADGroup.ps1](#add-manageddevicetoaadgroupps1) | Adds Microsoft Intune managed devices to Azure Active Directory security groups | `-UserPrincipalName`, `-DeviceName`, `-DeviceId`, `-GroupName` | Interactive workflow to add devices to security groups |
 
 ---
 
@@ -51,6 +52,47 @@ A collection of PowerShell scripts for managing and automating Microsoft Intune 
 
 ---
 
+### Add-ManagedDeviceToAADGroup.ps1
+
+**Purpose**: Adds Microsoft Intune managed devices to Azure Active Directory security groups through an interactive workflow.
+
+**Features**:
+- Multiple device search methods (by owner UPN, device name, or device ID)
+- Interactive device selection with formatted tables
+- Security group filtering (security-enabled, static membership only)
+- Comprehensive error handling and validation
+- Auto-selection when only one option is available
+- Detailed status reporting and logging
+
+**Parameters**:
+- `UserPrincipalName` (String): UPN of device owner to filter managed devices
+- `DeviceName` (String): Display name of the managed device to search for
+- `DeviceId` (String): Intune Device ID of the specific device to add
+- `GroupName` (String): Display name of the Azure AD security group
+
+**Examples**:
+```powershell
+# Interactive mode with full prompts
+.\Add-ManagedDeviceToAADGroup.ps1
+
+# Search by device owner
+.\Add-ManagedDeviceToAADGroup.ps1 -UserPrincipalName "user@contoso.com"
+
+# Search by device name
+.\Add-ManagedDeviceToAADGroup.ps1 -DeviceName "DESKTOP-ABC123"
+
+# Direct device and group specification
+.\Add-ManagedDeviceToAADGroup.ps1 -DeviceId "12345678-1234-1234-1234-123456789012" -GroupName "Security-Devices"
+```
+
+**Prerequisites**:
+- Microsoft.Graph.Groups PowerShell module
+- Microsoft.Graph.DeviceManagement PowerShell module
+- Microsoft.Graph.Identity.DirectoryManagement PowerShell module
+- Azure AD permissions: `DeviceManagementManagedDevices.Read.All`, `Device.Read.All`, `Group.ReadWrite.All`
+
+---
+
 ## Installation
 
 1. Clone this repository:
@@ -68,7 +110,7 @@ cd PowerShell-Intune-Tools
 ## Requirements
 
 - PowerShell 5.1 or later
-- Microsoft.Graph PowerShell module
+- Microsoft.Graph PowerShell modules (specific modules listed per script)
 - Appropriate Azure AD permissions for the operations being performed
 
 ## Contributing
