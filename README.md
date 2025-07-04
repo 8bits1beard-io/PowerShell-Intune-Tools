@@ -10,6 +10,7 @@ A collection of PowerShell scripts for managing and automating Microsoft Intune 
 |-------------|-------------|------------|-------|
 | [Get-ObjectID.ps1](#get-objectidps1) | Retrieves Azure AD device Object IDs from Microsoft Graph based on device display names | `-DeviceName`, `-InputFilePath`, `-OutputFilePath` | Single device lookup or bulk operations from file |
 | [Add-ManagedDeviceToAADGroup.ps1](#add-manageddevicetoaadgroupps1) | Adds Microsoft Intune managed devices to Azure Active Directory security groups | `-UserPrincipalName`, `-DeviceName`, `-DeviceId`, `-GroupName` | Interactive workflow to add devices to security groups |
+| [Set-EntraGroupDistribution.ps1](#set-entragroupdistributionps1) | Distributes device members from a source Entra group to target groups based on specified percentages | `-LogPath`, `-SkipModuleInstall` | Interactive percentage-based group distribution |
 
 ---
 
@@ -90,6 +91,43 @@ A collection of PowerShell scripts for managing and automating Microsoft Intune 
 - Microsoft.Graph.DeviceManagement PowerShell module
 - Microsoft.Graph.Identity.DirectoryManagement PowerShell module
 - Azure AD permissions: `DeviceManagementManagedDevices.Read.All`, `Device.Read.All`, `Group.ReadWrite.All`
+
+---
+
+### Set-EntraGroupDistribution.ps1
+
+**Purpose**: Interactively distributes device members from a source Entra group to target groups based on specified percentages.
+
+**Features**:
+- Interactive configuration interface for source and target groups
+- Percentage-based distribution with validation (total must equal 100%)
+- GUID format validation for group IDs
+- Configuration summary with user confirmation
+- Automatic Microsoft Graph connection with required scopes
+- Integration with AzureGroupStuff module for distribution logic
+- Comprehensive logging with JSON-formatted entries
+
+**Parameters**:
+- `LogPath` (String): Directory path for diagnostic logs (defaults to "C:\Windows\Logs")
+- `SkipModuleInstall` (Switch): Skip automatic installation of required modules
+
+**Examples**:
+```powershell
+# Interactive mode with module installation
+.\Set-EntraGroupDistribution.ps1
+
+# Skip module installation
+.\Set-EntraGroupDistribution.ps1 -SkipModuleInstall
+
+# Custom log path
+.\Set-EntraGroupDistribution.ps1 -LogPath "D:\Logs"
+```
+
+**Prerequisites**:
+- AzureGroupStuff PowerShell module
+- Microsoft.Graph.Authentication PowerShell module
+- Microsoft.Graph.Groups PowerShell module
+- Azure AD permissions: `Device.Read.All`, `User.Read.All`, `Group.ReadWrite.All`, `DeviceManagementManagedDevices.Read.All`
 
 ---
 
