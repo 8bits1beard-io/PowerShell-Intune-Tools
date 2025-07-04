@@ -412,6 +412,18 @@ try {
         Install-RequiredModules
         Write-Host "✓ Module installation completed" -ForegroundColor Green
         Write-Host ""
+        
+        # Import the AzureGroupStuff module
+        try {
+            Import-Module AzureGroupStuff -ErrorAction Stop
+            Write-LogMessage -LogLevel "Information" -Message "Successfully imported AzureGroupStuff module" -LogPath $LogPath -LogFileName $script:LogFileName
+        }
+        catch {
+            $errorMsg = "Failed to import AzureGroupStuff module: $($_.Exception.Message)"
+            Write-Error $errorMsg
+            Write-LogMessage -LogLevel "Error" -Message $errorMsg -LogPath $LogPath -LogFileName $script:LogFileName
+            throw
+        }
     } else {
         Write-LogMessage -LogLevel "Information" -Message "Skipping module installation as requested" -LogPath $LogPath -LogFileName $script:LogFileName
     }
@@ -445,5 +457,4 @@ catch {
     
     # Exit with error code
     exit 1
-}
 }
